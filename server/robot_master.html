@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Robot control</title>
+
+<script>
+var xhttp=new XMLHttpRequest();
+
+function sendCommand(command){
+  var session=document.getElementById('session').value;
+  var user_password=document.getElementById('user_password').value;
+  var quantity=document.getElementById('quantity').value;
+  var status_display=document.getElementById('status');
+
+  status_display.innerHTML="Command:  "+command+" "+quantity+"   TRANSMITTING";
+  xhttp.open("POST", "robot.php", false);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  var request_string="request=send_command" +
+                     "&session=" + session +
+	             "&user_password=" + user_password +
+	             "&command=" + command +
+	             "&quantity=" + quantity;
+  xhttp.send(request_string);
+  status_display.innerHTML=
+    "Command:  " + command + " " + quantity + "   " + xhttp.statusText + 
+    "<br>Response:  " + xhttp.responseText;
+}
+</script>
+
+</head>
+<body>
+<h1>Form robot control</h1>
+<p>
+  Session: <input id="session" type="text" name="session"><br>
+  Password: <input id="user_password" type="text" name="user_password"><br>
+  Quantity: <input id="quantity" type="text" name="quantity"><br>
+</p>
+<p>
+<h1>AJAX robot control</h1>
+<table>
+  <tr>
+    <td><button type="button" onclick="sendCommand('driveLeft')">\</button></td>
+    <td><button type="button" onclick="sendCommand('driveForward')">^</button></td>
+    <td><button type="button" onclick="sendCommand('driveRight')">/</button></td>
+  </tr>
+  <tr>
+    <td><button type="button" onclick="sendCommand('turnLeft')">&lt;</button></td>
+    <td><button type="button" onclick="sendCommand('stop')">stop</button></td>
+    <td><button type="button" onclick="sendCommand('turnRight')">&gt;</button></td>
+  </tr>
+  <tr>
+    <td><button type="button" onclick="sendCommand('backLeft')">/</button></td>
+    <td><button type="button" onclick="sendCommand('driveBack')">v</button></td>
+    <td><button type="button" onclick="sendCommand('backRight')">\</button></td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td><button type="button" onclick="sendCommand('lowerClaw')">lower</button></td>
+    <td><button type="button" onclick="sendCommand('liftClaw')">lift</button></td>
+  </tr>
+  <tr>
+    <td><button type="button" onclick="sendCommand('closeClaw')">close</button></td>
+    <td><button type="button" onclick="sendCommand('openClaw')">open</button></td>
+  </tr>
+  <tr>
+    <td><button type="button" onclick="sendCommand('exit')">exit</button></td>
+  </tr>
+</table>
+</p>
+<p id="status">Command:  </p>
+</body>
+</html>
